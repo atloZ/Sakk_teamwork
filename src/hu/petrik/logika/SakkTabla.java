@@ -81,6 +81,8 @@ public class SakkTabla {
                 return isErvenyesBastyaLepes(sx,sy,dx,dy);
             } else if (isKivalasztottFigura(sx, sy, 13) || isKivalasztottFigura(sx, sy, 23)) {
                 return isErvenyesHuszarLepes(sx,sy,dx,dy);
+            } else if (isKivalasztottFigura(sx, sy, 14) || isKivalasztottFigura(sx, sy, 24)) {
+                return isErvenyesFutoLepes(sx,sy,dx,dy);
             }
         }
 
@@ -111,6 +113,26 @@ public class SakkTabla {
             boolean utessotettel = isVilagosFigura(dx, dy) && dx - sx == 1 && Math.abs(sy - dy) == 1;
 
             isHelyesSotetLepes = kezdoLepesSotettel || eloreLepesSotettel || utessotettel;
+        }
+
+        return  isHelyesVilagosLepes || isHelyesSotetLepes;
+    }
+
+    public boolean isErvenyesFutoLepes(int sx, int sy, int dx, int dy){
+        boolean isHelyesVilagosLepes = false;
+        boolean isHelyesSotetLepes = false;
+
+        if (isVilagosFigura(sx,sy)) {
+            boolean eloreLepesVilagossal = (Math.abs(sx - dx) == Math.abs(sy - dy)) && isUresHely(dx, dy);
+            boolean utesVilagossal = isSotetFigura(dx, dy) && (Math.abs(sx - dx) == Math.abs(sy - dy));
+
+            isHelyesVilagosLepes = eloreLepesVilagossal || utesVilagossal;
+
+        }else if (isSotetFigura(sx,sy)) {
+            boolean eloreLepesSotettel = (Math.abs(sx - dx) == Math.abs(sy - dy)) && isUresHely(dx, dy);
+            boolean utessotettel = isSotetFigura(dx, dy) && (Math.abs(sx - dx) == Math.abs(sy - dy));
+
+            isHelyesSotetLepes = eloreLepesSotettel || utessotettel;
         }
 
         return  isHelyesVilagosLepes || isHelyesSotetLepes;
