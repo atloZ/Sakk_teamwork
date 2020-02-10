@@ -4,6 +4,8 @@ import hu.petrik.logika.SakkTabla;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SakkFelulet extends JFrame {
 
@@ -11,6 +13,8 @@ public class SakkFelulet extends JFrame {
     private JPanel panelSakkTabla;
 
     private SakkTabla tabla;
+
+    private SakkTablaElem forrasElem, celElem;
 
     public SakkFelulet(){
         this.tabla = new SakkTabla();
@@ -61,12 +65,60 @@ public class SakkFelulet extends JFrame {
 
             for (int j=0; j<8; j++){
                 SakkTablaElem elem = new SakkTablaElem(i,j,this.tabla.getErtek(i,j));
+
+                elem.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        elemKattintas(e);
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+
+                    }
+                });
+
                 panelSakkTabla.add(elem);
             }
         }
 
         this.revalidate();
         this.repaint();
+    }
+
+    public void elemKattintas(MouseEvent me){
+        SakkTablaElem aktualisElem = (SakkTablaElem) me.getSource();
+
+        if (forrasElem == null && celElem == null && aktualisElem.getErtek() != 0){
+            forrasElem = aktualisElem;
+            System.out.println("Forras:" + forrasElem);
+        }else if (forrasElem != null && celElem == null && aktualisElem != forrasElem){
+            celElem = aktualisElem;
+            System.out.println("Cel" + celElem);
+        }
+
+        if (forrasElem != null && celElem != null){
+            int sx = forrasElem.getPozicioX();
+            int sy = forrasElem.getPozicioY();
+
+            int dx = celElem.getPozicioX();
+            int dy = celElem.getPozicioY();
+
+            tabla.lep(sx,sy,dx,dy);
+
+            forrasElem.setErtek(tabla.getErtek(sx,sy));
+            celElem.setErtek(tabla.getErtek(dx,dy));
+
+            forrasElem = null;
+            celElem = null;
+        }
+
+
     }
 
 

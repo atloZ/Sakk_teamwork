@@ -78,9 +78,9 @@ public class SakkTabla {
             if (isKivalasztottFigura(sx, sy, 11) || isKivalasztottFigura(sx, sy, 21)) {
                 return isErvenyesGyalogLepes(sx, sy, dx, dy);
             } else if (isKivalasztottFigura(sx, sy, 12) || isKivalasztottFigura(sx, sy, 22)) {
-                isErvenyesBastyaLepes(sx,dx,sy,dy);
+                return isErvenyesBastyaLepes(sx,sy,dx,dy);
             } else if (isKivalasztottFigura(sx, sy, 13) || isKivalasztottFigura(sx, sy, 23)) {
-                isErvenyesHuszarLepes(sx,dx,sy,dy);
+                return isErvenyesHuszarLepes(sx,sy,dx,dy);
             }
         }
 
