@@ -41,6 +41,7 @@ public class SakkFelulet extends JFrame {
         sakkTablaMegjelenit();
     }
 
+    /* Valószínűleg a zárójelekkel van a probléma de nem jöttem rá pontosan */
     public void TimerTick(){
         this.stopper = new Timer();
         this.stopper.schedule(new TimerTask() {
@@ -48,10 +49,10 @@ public class SakkFelulet extends JFrame {
             @Override
             public void run() {
                 labelStopper.setText(String.format("%02d:%02d",
-                        (new Date().getTime()) / 1000L / 60L,
-                        ((new Date().getTime())/1000L % 60L)));
+                        ((new Date().getTime()) / 1000) / 60,
+                        ((new Date().getTime()) / 1000) % 60));
             }
-        },0L,100L);
+        },0,100);
     }
 
     private void initComponets(){
@@ -71,18 +72,27 @@ public class SakkFelulet extends JFrame {
         this.panelSakkTabla.setLayout(new GridLayout(9,9));
 
         this.labelStopper = new JLabel();
-        this.labelStopper.setText("00:00");
+        this.labelStopper.setText("00:00.000");
         this.labelStopper.setSize(400,40);
         this.labelStopper.setLayout(new BorderLayout());
 
-
         this.panelOldalAllapot = new JPanel();//Oldal panel létrehozása
         this.panelOldalAllapot.setLayout(new BorderLayout());//Oldal panel mérete
-        this.foAblak.add(this.panelOldalAllapot,BorderLayout.EAST);
         this.panelOldalAllapot.add(this.labelStopper);
+        //this.panelOldalAllapot.add(this.labelAktualisJatekos);
+        //this.panelOldalAllapot.add(this.labelLepesek);
+        this.foAblak.add(this.panelOldalAllapot,BorderLayout.EAST);
+
+        this.labelFeherBabukSzama = new JLabel();
+        this.labelFeherBabukSzama.setText("Fehér - " + this.tabla.getVilagosFigurakSzama());
+
+        this.labelFeketeBabukSzama = new JLabel();
+        this.labelFeketeBabukSzama.setText("Fekete - " + this.tabla.getSotetFigurakSzama());
 
         this.panelAlso = new JPanel();
         this.panelAlso.setLayout(new BorderLayout());
+        this.panelAlso.add(this.labelFeherBabukSzama);
+        this.panelAlso.add(this.labelFeketeBabukSzama);
         this.foAblak.add(this.panelAlso, BorderLayout.SOUTH);
 
         this.foAblak.add(this.panelSakkTabla, BorderLayout.CENTER);
