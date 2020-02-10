@@ -22,11 +22,7 @@ public class SakkFelulet extends JFrame {
     private JLabel labelLepesek;
     private JLabel labelAktualisJatekos;
     private JLabel labelJatekos;
-    private JLabel labelFeketeBabukSzama;
-    private JLabel labelFeherBabukSzama;
-
-    private JList listLepesek;
-    private DefaultListModel listModel;
+    private JLabel labelFeketeBabukSzama, labelFeherBabukSzama;
 
     private long stopperInditas;
 
@@ -55,7 +51,7 @@ public class SakkFelulet extends JFrame {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    labelStopper.setText(timerFormater(ms));
+                    labelStopper.setText("Elteltidő: " + timerFormater(ms));
                     ms++;
                 }
             }
@@ -70,8 +66,14 @@ public class SakkFelulet extends JFrame {
         return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
     }
 
+    public void babukSzamaFrisitése(){
+        this.labelFeherBabukSzama.setText("Fehér - " + this.tabla.getVilagosFigurakSzama());
+        this.labelFeketeBabukSzama.setText("Fekete - " + this.tabla.getSotetFigurakSzama());
+    }
+
     private void initComponets(){
-        this.setTitle("Sakk 1.0");
+
+        this.setTitle("Sakk BETA");
 
         int szelesseg = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         int magassag = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
@@ -82,33 +84,34 @@ public class SakkFelulet extends JFrame {
         this.foAblak = getContentPane();
         this.foAblak.setLayout(new BorderLayout(19,15));
 
-        this.panelSakkTabla = new JPanel();
-        this.panelSakkTabla.setLayout(new GridLayout(9,9));
-
         this.labelStopper = new JLabel();
         this.labelStopper.setText("00:00.000");
         this.labelStopper.setSize(400,40);
         this.labelStopper.setLayout(new BorderLayout());
 
-        this.panelOldalAllapot = new JPanel();//Oldal panel létrehozása
-        this.panelOldalAllapot.setLayout(new BorderLayout());//Oldal panel mérete
-        this.panelOldalAllapot.add(this.labelStopper);
-        //this.panelOldalAllapot.add(this.labelAktualisJatekos);
-        //this.panelOldalAllapot.add(this.labelLepesek);
-        this.foAblak.add(this.panelOldalAllapot,BorderLayout.EAST);
+        this.labelAktualisJatekos = new JLabel();
+        this.labelAktualisJatekos.setText("Aktuális játékos: Fehér");
 
         this.labelFeherBabukSzama = new JLabel();
-        this.labelFeherBabukSzama.setText("Fehér - " + this.tabla.getVilagosFigurakSzama());
-
         this.labelFeketeBabukSzama = new JLabel();
-        this.labelFeketeBabukSzama.setText("Fekete - " + this.tabla.getSotetFigurakSzama());
+        this.babukSzamaFrisitése();
+
+        this.panelSakkTabla = new JPanel();
+        this.panelSakkTabla.setLayout(new GridLayout(9,9));
+
+        this.panelOldalAllapot = new JPanel();//Oldal panel létrehozása
+        this.panelOldalAllapot.setLayout(new GridLayout(4,1));//Oldal panel mérete
+        this.panelOldalAllapot.add(this.labelStopper);
+        this.panelOldalAllapot.add(this.labelAktualisJatekos);
 
         this.panelAlso = new JPanel();
-        this.panelAlso.setLayout(new BorderLayout());
+        this.panelAlso.setLayout(new GridLayout(2,1));
         this.panelAlso.add(this.labelFeherBabukSzama);
         this.panelAlso.add(this.labelFeketeBabukSzama);
-        this.foAblak.add(this.panelAlso, BorderLayout.SOUTH);
 
+
+        this.foAblak.add(this.panelAlso, BorderLayout.SOUTH);
+        this.foAblak.add(this.panelOldalAllapot,BorderLayout.EAST);
         this.foAblak.add(this.panelSakkTabla, BorderLayout.CENTER);
 
         this.stopperInditas = (new Date().getTime());
@@ -145,16 +148,6 @@ public class SakkFelulet extends JFrame {
                     public void mouseClicked(MouseEvent e) {
                         elemKattintas(e);
                     }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-
-                    }
                 });
 
                 panelSakkTabla.add(elem);
@@ -175,6 +168,13 @@ public class SakkFelulet extends JFrame {
         }else if (forrasElem != null && celElem == null && aktualisElem != forrasElem){
             celElem = aktualisElem;
             System.out.println("Cel" + celElem);
+
+        this.panelOldalAllapot.add(new JLabel(String.format(
+                "%s: (%s %d)->(%s %d)",
+                labelAktualisJatekos.getText(),
+                forrasElem.getPozicioX()+1, tabla.getErtek(0,forrasElem.getPozicioY()),
+                celElem.getPozicioX()+1,celElem.getPozicioY()+1
+        )));
         }
 
         if (forrasElem != null && celElem != null){
@@ -195,8 +195,11 @@ public class SakkFelulet extends JFrame {
                 this.setBackground(Color.decode("#8B4513"));
             }
 
+            babukSzamaFrisitése();
+
             forrasElem = null;
             celElem = null;
+
         }
     }
 }

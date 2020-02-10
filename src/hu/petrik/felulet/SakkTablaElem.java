@@ -61,8 +61,6 @@ public class SakkTablaElem extends JButton {
         Image img = new ImageIcon(fajlNev).getImage().getScaledInstance(50,50, Image.SCALE_SMOOTH);
         this.setIcon(new ImageIcon(img));
 
-//        this.setText(this.ertek+ "");
-
         this.revalidate();
         this.repaint();
     }
