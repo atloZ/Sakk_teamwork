@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.TimerTask;
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 public class SakkFelulet extends JFrame {
 
@@ -41,23 +42,36 @@ public class SakkFelulet extends JFrame {
         sakkTablaMegjelenit();
     }
 
-    /* Valószínűleg a zárójelekkel van a probléma de nem jöttem rá pontosan */
     public void TimerTick(){
         this.stopper = new Timer();
         this.stopper.schedule(new TimerTask() {
 
             @Override
             public void run() {
-                labelStopper.setText(String.format("%02d:%02d",
-                        ((new Date().getTime()) / 1000) / 60,
-                        ((new Date().getTime()) / 1000) % 60));
+                int ms = 0;
+                while (true){
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    labelStopper.setText(timerFormater(ms));
+                    ms++;
+                }
             }
         },0,100);
     }
 
+    private String timerFormater(int l) {
+        final long hr = TimeUnit.MILLISECONDS.toHours(l);
+        final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
+        final long sec = TimeUnit.MILLISECONDS.toSeconds(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
+        final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
+        return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
+    }
+
     private void initComponets(){
         this.setTitle("Sakk 1.0");
-//        this.setSize(1024,768);
 
         int szelesseg = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         int magassag = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
@@ -154,7 +168,6 @@ public class SakkFelulet extends JFrame {
     public void elemKattintas(MouseEvent me){
         SakkTablaElem aktualisElem = (SakkTablaElem) me.getSource();
 
-
         if (forrasElem == null && celElem == null && aktualisElem.getErtek() != 0){
             aktualisElem.setBackground(Color.decode("#ABB2B9"));
             forrasElem = aktualisElem;
@@ -186,6 +199,4 @@ public class SakkFelulet extends JFrame {
             celElem = null;
         }
     }
-
-
 }
