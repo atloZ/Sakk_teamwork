@@ -6,11 +6,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
+import java.util.TimerTask;
+import java.util.Timer;
 
 public class SakkFelulet extends JFrame {
 
     private Container foAblak;
     private JPanel panelSakkTabla;
+    private JPanel panelOldalAllapot;
+    private JPanel panelAlso;
+
+    private JLabel labelStopper;
+
+    private long stopperInditas;
+
+    private Timer stopper;
 
     private SakkTabla tabla;
 
@@ -20,6 +31,19 @@ public class SakkFelulet extends JFrame {
         this.tabla = new SakkTabla();
         initComponets();
         sakkTablaMegjelenit();
+    }
+
+    public void TimerTick(){
+        this.stopper = new Timer();
+        this.stopper.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                labelStopper.setText(String.format("%02d:%02d",
+                        (new Date().getTime())/1000/60,
+                        ((new Date().getTime())/1000)%60));
+            }
+        },0,100);
     }
 
     private void initComponets(){
@@ -33,12 +57,20 @@ public class SakkFelulet extends JFrame {
         this.setLocationRelativeTo(null);
 
         this.foAblak = getContentPane();
-        this.foAblak.setLayout(new BorderLayout(10,10));
+        this.foAblak.setLayout(new BorderLayout(19,15));
 
         this.panelSakkTabla = new JPanel();
         this.panelSakkTabla.setLayout(new GridLayout(9,9));
 
+        this.panelOldalAllapot = new JPanel();
+        this.panelOldalAllapot.setLayout(new GridLayout(10,6));
+
+        this.panelAlso = new JPanel();
+        this.panelAlso.setLayout(new GridLayout(10,5));
+
+        this.foAblak.add(this.panelAlso, BorderLayout.SOUTH);
         this.foAblak.add(this.panelSakkTabla, BorderLayout.CENTER);
+        this.foAblak.add(this.panelOldalAllapot,BorderLayout.EAST);
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
