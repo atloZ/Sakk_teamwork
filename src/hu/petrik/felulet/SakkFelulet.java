@@ -94,6 +94,8 @@ public class SakkFelulet extends JFrame {
     public void elemKattintas(MouseEvent me){
         SakkTablaElem aktualisElem = (SakkTablaElem) me.getSource();
 
+        aktualisElem.setBackground(Color.decode("#ABB2B9"));
+
         if (forrasElem == null && celElem == null && aktualisElem.getErtek() != 0){
             forrasElem = aktualisElem;
             System.out.println("Forras:" + forrasElem);
