@@ -18,6 +18,14 @@ public class SakkFelulet extends JFrame {
     private JPanel panelAlso;
 
     private JLabel labelStopper;
+    private JLabel labelLepesek;
+    private JLabel labelAktualisJatekos;
+    private JLabel labelJatekos;
+    private JLabel labelFeketeBabukSzama;
+    private JLabel labelFeherBabukSzama;
+
+    private JList listLepesek;
+    private DefaultListModel listModel;
 
     private long stopperInditas;
 
@@ -40,10 +48,10 @@ public class SakkFelulet extends JFrame {
             @Override
             public void run() {
                 labelStopper.setText(String.format("%02d:%02d",
-                        (new Date().getTime())/1000/60,
-                        ((new Date().getTime())/1000)%60));
+                        (new Date().getTime()) / 1000L / 60L,
+                        ((new Date().getTime())/1000L % 60L)));
             }
-        },0,100);
+        },0L,100L);
     }
 
     private void initComponets(){
@@ -62,22 +70,32 @@ public class SakkFelulet extends JFrame {
         this.panelSakkTabla = new JPanel();
         this.panelSakkTabla.setLayout(new GridLayout(9,9));
 
-        this.panelOldalAllapot = new JPanel();
-        this.panelOldalAllapot.setLayout(new GridLayout(10,6));
+        this.labelStopper = new JLabel();
+        this.labelStopper.setText("00:00");
+        this.labelStopper.setSize(400,40);
+        this.labelStopper.setLayout(new BorderLayout());
+
+
+        this.panelOldalAllapot = new JPanel();//Oldal panel létrehozása
+        this.panelOldalAllapot.setLayout(new BorderLayout());//Oldal panel mérete
+        this.foAblak.add(this.panelOldalAllapot,BorderLayout.EAST);
+        this.panelOldalAllapot.add(this.labelStopper);
 
         this.panelAlso = new JPanel();
-        this.panelAlso.setLayout(new GridLayout(10,5));
-
+        this.panelAlso.setLayout(new BorderLayout());
         this.foAblak.add(this.panelAlso, BorderLayout.SOUTH);
-        this.foAblak.add(this.panelSakkTabla, BorderLayout.CENTER);
-        this.foAblak.add(this.panelOldalAllapot,BorderLayout.EAST);
 
+        this.foAblak.add(this.panelSakkTabla, BorderLayout.CENTER);
+
+        this.stopperInditas = (new Date().getTime());
+        this.TimerTick();
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
     }
 
     public void sakkTablaMegjelenit(){
         this.panelSakkTabla.removeAll();
+
 
         this.panelSakkTabla.add(new JLabel(""));
         for (int i=0; i<8; i++){
