@@ -84,7 +84,7 @@ public class SakkTabla {
             } else if (isKivalasztottFigura(sx, sy, 14) || isKivalasztottFigura(sx, sy, 24)) {
                 return isErvenyesFutoLepes(sx,sy,dx,dy);
             } else if (isKivalasztottFigura(sx, sy, 16) || isKivalasztottFigura(sx, sy, 26)) {
-                return isErvenyesFutoLepes(sx,sy,dx,dy);
+                return isErvenyesKiralynoLepes(sx,sy,dx,dy);
             }
         }
 
@@ -132,7 +132,7 @@ public class SakkTabla {
     }
 
     public boolean isErvenyesKiralynoLepes(int sx, int sy, int dx, int dy){
-        return isErvenyesFutoLepes(sx, sy, dx, dy) || isErvenyesBastyaLepes(sx, sy, dx, dy);
+        return (isErvenyesFutoLepes(sx, sy, dx, dy) || isErvenyesBastyaLepes(sx, sy, dx, dy)) && isEllenfelFigurajatUtiE(sx, sy, dx, dy);
     }
 
     public boolean isErvenyesBastyaLepes(int sx, int sy, int dx, int dy) {
